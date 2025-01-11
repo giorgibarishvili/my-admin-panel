@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { fetchUsers } from "../services/userService";
 import Dashboard from "../components/DashBoard";
 import { User } from "../models/UserModels";
+import Modal from "../components/Modal";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -27,6 +29,15 @@ function UserTable() {
   return (
     <div className="overflow-x-auto">
       <Dashboard />
+      {modalOpen && (
+        <Modal
+          title="Create User"
+          message="Do you want to create a new user?"
+          onClose={() => setModalOpen(false)}
+        >
+          <div>asd</div>
+        </Modal>
+      )}
       <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
         <thead className="ltr:text-left rtl:text-right text-left">
           <tr>
@@ -43,7 +54,10 @@ function UserTable() {
               status
             </th>
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              <button className="inline-block rounded bg-green-500 px-4 py-2 text-xs font-medium text-white hover:bg-green-600 mx-2">
+              <button
+                onClick={() => setModalOpen(true)}
+                className="inline-block rounded bg-green-500 px-4 py-2 text-xs font-medium text-white hover:bg-green-600 mx-2"
+              >
                 Create user
               </button>
             </th>

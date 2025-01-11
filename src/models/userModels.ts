@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface User {
   id: number;
   firstName: string;
@@ -7,4 +9,10 @@ export interface User {
   role: string;
   password: string;
   username: string;
+}
+export interface ModalProps {
+  title: string;
+  message?: string;
+  onClose: () => void;
+  children?: ReactNode;
 }
