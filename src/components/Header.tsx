@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "./Button";
 import UserIcon from "../assets/icons/users-solid.svg";
 
-function Dashboard() {
+function Header() {
   return (
     <div className="bg-slate-600 text-white py-5">
       <div className="mx-5 flex justify-between items-center">
@@ -17,4 +17,4 @@ function Dashboard() {
     </div>
   );
 }
-export default Dashboard;
+export default Header;

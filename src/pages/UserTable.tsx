@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { fetchUsers } from "../services/userService";
-import Dashboard from "../components/DashBoard";
+import Header from "../components/Header";
 import { User } from "../models/UserModels";
 import Modal from "../components/Modal";
 import axios from "axios";
+import UserCreateEditModal from "../components/UserCreateEditModal";
+import { ButtonSmall } from "../components/ButtonSmall";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
+  const [userCreateOrEdit, setUserCreateOrEdit] = useState(false);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -26,11 +30,37 @@ function UserTable() {
     getUsers();
   }, []);
 
+  const handleEditClick = (user: User) => {
+    setUserToEdit(user);
+    setUserCreateOrEdit(true);
+  };
+
+  const handleCreateClick = () => {
+    setUserToEdit(null);
+    setUserCreateOrEdit(true);
+  };
+
+  const handleSaveUser = async (user: User) => {
+    try {
+      if (userToEdit) {
+        await axios.put(`https://dummyjson.com/users/${user.id}`, user);
+      } else {
+        delete (user as any).id; //TODO
+        await axios.post("https://dummyjson.com/users/add", user);
+      }
+      const res = (await fetchUsers()) as User[];
+      setUsers(res);
+      setUserCreateOrEdit(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleDeleteClick = (userId: number) => {
     setUserToDelete(userId);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (userToDelete) {
       setUsers((prevUsers) =>
         prevUsers.filter((user) => user.id !== userToDelete)
@@ -40,32 +70,41 @@ function UserTable() {
         .catch(console.error);
       setUserToDelete(null);
     }
+    const res = (await fetchUsers()) as User[];
+    setUsers(res);
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   return (
     <div className="overflow-x-auto">
-      <Dashboard />
+      <Header />
+      {userCreateOrEdit && (
+        <UserCreateEditModal
+          title={userToEdit ? "Edit user" : "Create user"}
+          onClose={() => setUserCreateOrEdit(false)}
+          message={
+            userToEdit
+              ? "Do you want to edit this user?"
+              : "Do you want to create this user?"
+          }
+          user={userToEdit}
+          onSave={handleSaveUser}
+        ></UserCreateEditModal>
+      )}
       {userToDelete && (
         <Modal
-          title="Create User"
+          title="Delete User"
           message="Do you want to delete user?"
           onClose={() => setUserToDelete(null)}
         >
           <div>
-            <button
-              onClick={() => handleConfirmDelete()}
-              className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2"
-            >
+            <ButtonSmall onClick={() => handleConfirmDelete()} color="green">
               yes
-            </button>
-            <button
-              onClick={() => setUserToDelete(null)}
-              className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2"
-            >
+            </ButtonSmall>
+            <ButtonSmall onClick={() => setUserToDelete(null)} color="red">
               no
-            </button>
+            </ButtonSmall>
           </div>
         </Modal>
       )}
@@ -85,9 +124,9 @@ function UserTable() {
               status
             </th>
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              <button className="inline-block rounded bg-green-500 px-4 py-2 text-xs font-medium text-white hover:bg-green-600 mx-2">
+              <ButtonSmall onClick={() => handleCreateClick()} color="green">
                 Create user
-              </button>
+              </ButtonSmall>
             </th>
           </tr>
         </thead>
@@ -107,15 +146,18 @@ function UserTable() {
                 {user.role}
               </td>
               <td className="whitespace-nowrap px-4 py-2">
-                <button className="inline-block rounded bg-yellow-500 px-4 py-2 text-xs font-medium text-white hover:bg-yellow-600 mx-2">
+                <ButtonSmall
+                  onClick={() => handleEditClick(user)}
+                  color="yellow"
+                >
                   edit
-                </button>
-                <button
+                </ButtonSmall>
+                <ButtonSmall
                   onClick={() => handleDeleteClick(user.id)}
-                  className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2"
+                  color="red"
                 >
                   delete
-                </button>
+                </ButtonSmall>
               </td>
             </tr>
           ))}
