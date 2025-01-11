@@ -3,12 +3,13 @@ import { fetchUsers } from "../services/userService";
 import Dashboard from "../components/DashBoard";
 import { User } from "../models/UserModels";
 import Modal from "../components/Modal";
+import axios from "axios";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -24,18 +25,48 @@ function UserTable() {
     };
     getUsers();
   }, []);
+
+  const handleDeleteClick = (userId: number) => {
+    setUserToDelete(userId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (userToDelete) {
+      setUsers((prevUsers) =>
+        prevUsers.filter((user) => user.id !== userToDelete)
+      );
+      axios
+        .delete(`https://dummyjson.com/users/${userToDelete}`)
+        .catch(console.error);
+      setUserToDelete(null);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   return (
     <div className="overflow-x-auto">
       <Dashboard />
-      {modalOpen && (
+      {userToDelete && (
         <Modal
           title="Create User"
-          message="Do you want to create a new user?"
-          onClose={() => setModalOpen(false)}
+          message="Do you want to delete user?"
+          onClose={() => setUserToDelete(null)}
         >
-          <div>asd</div>
+          <div>
+            <button
+              onClick={() => handleConfirmDelete()}
+              className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2"
+            >
+              yes
+            </button>
+            <button
+              onClick={() => setUserToDelete(null)}
+              className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2"
+            >
+              no
+            </button>
+          </div>
         </Modal>
       )}
       <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
@@ -54,10 +85,7 @@ function UserTable() {
               status
             </th>
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              <button
-                onClick={() => setModalOpen(true)}
-                className="inline-block rounded bg-green-500 px-4 py-2 text-xs font-medium text-white hover:bg-green-600 mx-2"
-              >
+              <button className="inline-block rounded bg-green-500 px-4 py-2 text-xs font-medium text-white hover:bg-green-600 mx-2">
                 Create user
               </button>
             </th>
@@ -82,7 +110,10 @@ function UserTable() {
                 <button className="inline-block rounded bg-yellow-500 px-4 py-2 text-xs font-medium text-white hover:bg-yellow-600 mx-2">
                   edit
                 </button>
-                <button className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2">
+                <button
+                  onClick={() => handleDeleteClick(user.id)}
+                  className="inline-block rounded bg-red-500 px-4 py-2 text-xs font-medium text-white hover:bg-red-600 mx-2"
+                >
                   delete
                 </button>
               </td>
