@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  age: number;
-  role: string;
-}
+import { fetchUsers } from "../services/userService";
+import Dashboard from "../components/DashBoard";
+import { User } from "../models/UserModels";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,10 +9,10 @@ function UserTable() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const getUsers = async () => {
       try {
-        const res = await axios.get("https://dummyjson.com/users");
-        setUsers(res.data.users);
+        const res = (await fetchUsers()) as User[];
+        setUsers(res);
       } catch (err) {
         setError("failed to fetch data");
         console.log(err);
@@ -27,14 +20,15 @@ function UserTable() {
         setLoading(false);
       }
     };
-    fetchUsers();
+    getUsers();
   }, []);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   return (
     <div className="overflow-x-auto">
+      <Dashboard />
       <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
-        <thead className="ltr:text-left rtl:text-right">
+        <thead className="ltr:text-left rtl:text-right text-left">
           <tr>
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
               Name
