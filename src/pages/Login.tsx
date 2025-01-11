@@ -58,7 +58,7 @@ function Login() {
         placeholder="Password"
         type="password"
       />
-      <Button className="mt-5">Log in</Button>
+      <Button className="mt-5 bg-blue-600s active:bg-blue-500">Log in</Button>
     </form>
   );
 }

@@ -42,6 +42,11 @@ function UserTable() {
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
               status
             </th>
+            <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <button className="inline-block rounded bg-green-500 px-4 py-2 text-xs font-medium text-white hover:bg-green-600 mx-2">
+                Create user
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
