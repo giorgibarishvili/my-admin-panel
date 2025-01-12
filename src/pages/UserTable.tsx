@@ -95,7 +95,7 @@ function UserTable() {
           message={
             userToEdit
               ? "Do you want to edit this user?"
-              : "Do you want to create this user?"
+              : "Do you want to create user?"
           }
           user={userToEdit}
           onSave={handleSaveUser}
@@ -104,7 +104,7 @@ function UserTable() {
       {userToDelete && (
         <Modal
           title="Delete User"
-          message="Do you want to delete user?"
+          message="Are you sure you want to delete this user?"
           onClose={() => setUserToDelete(null)}
         >
           <div>
@@ -112,13 +112,13 @@ function UserTable() {
               onClick={() => handleConfirmDelete()}
               className="bg-green-500 hover:bg-green-600"
             >
-              yes
+              Yes
             </ButtonSmall>
             <ButtonSmall
               onClick={() => setUserToDelete(null)}
               className="bg-red-500 hover:bg-red-600"
             >
-              no
+              No
             </ButtonSmall>
           </div>
         </Modal>

@@ -9,7 +9,7 @@ const ButtonSmall = React.forwardRef<
       ref={ref}
       {...props}
       className={
-        `inline-block rounded px-4 py-2 text-xs font-medium text-white mx-2 ` +
+        `inline-block rounded px-4 py-2 text-xs font-medium text-white me-2 ` +
         className
       }
     >

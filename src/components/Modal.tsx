@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { ModalProps } from "../models/UserModels";
+import Xmark from "../assets/icons/xmark-solid.svg";
 
 function Modal({ title, message, onClose, children }: ModalProps) {
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -37,7 +38,7 @@ function Modal({ title, message, onClose, children }: ModalProps) {
             className="text-gray-500 hover:text-gray-800"
             aria-label="Close"
           >
-            &times;
+            <img src={Xmark} alt="close" />
           </button>
         </div>
         {message && <p className="mt-4 text-gray-500">{message}</p>}
