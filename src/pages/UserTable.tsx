@@ -21,6 +21,8 @@ function UserTable() {
   const [totalUsers, setTotalUsers] = useState(0);
 
   const usersPerPage = 30;
+  const startIndex = (currentPage - 1) * usersPerPage + 1;
+  const endIndex = Math.min(currentPage * usersPerPage, totalUsers);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -102,7 +104,12 @@ function UserTable() {
   return (
     <div className="overflow-x-auto">
       <Header />
-      <Search onSearch={handleSearch} searchValue={searchQuery} />
+      <div className="flex items-center justify-between ">
+        <Search onSearch={handleSearch} searchValue={searchQuery} />
+        <div className="text-sm text-gray-600 me-5">
+          Showing {startIndex} to {endIndex} of {totalUsers} users
+        </div>
+      </div>
       {userCreateOrEdit && (
         <UserCreateEditModal
           title={userToEdit ? "Edit user" : "Create user"}
