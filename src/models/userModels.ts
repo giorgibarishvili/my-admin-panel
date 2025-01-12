@@ -16,3 +16,8 @@ export interface ModalProps {
   onClose: () => void;
   children?: ReactNode;
 }
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}

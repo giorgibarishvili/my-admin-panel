@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import axios from "axios";
 import UserCreateEditModal from "../components/UserCreateEditModal";
 import { ButtonSmall } from "../components/ButtonSmall";
+import Pagination from "../components/Pagination";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,6 +15,8 @@ function UserTable() {
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
   const [userCreateOrEdit, setUserCreateOrEdit] = useState(false);
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
 
   useEffect(() => {
     const getUsers = async () => {
@@ -74,6 +77,12 @@ function UserTable() {
     setUsers(res);
   };
 
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  const displayedUsers = users.slice(
+    (currentPage - 1) * usersPerPage,
+    currentPage * usersPerPage
+  );
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   return (
@@ -105,7 +114,10 @@ function UserTable() {
             >
               yes
             </ButtonSmall>
-            <ButtonSmall onClick={() => setUserToDelete(null)} className="bg-red-500 hover:bg-red-600">
+            <ButtonSmall
+              onClick={() => setUserToDelete(null)}
+              className="bg-red-500 hover:bg-red-600"
+            >
               no
             </ButtonSmall>
           </div>
@@ -127,25 +139,28 @@ function UserTable() {
               status
             </th>
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              <ButtonSmall onClick={() => handleCreateClick()} className="bg-green-500 hover:bg-green-600">
+              <ButtonSmall
+                onClick={() => handleCreateClick()}
+                className="bg-green-500 hover:bg-green-600"
+              >
                 Create user
               </ButtonSmall>
             </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {users.map((user) => (
+          {displayedUsers.map((user) => (
             <tr key={user.id}>
-              <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 min-w-36 max-w-48">
                 {user.firstName + " " + user.lastName}
               </td>
-              <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td className="whitespace-nowrap px-4 py-2 text-gray-700 max-w-48 min-w-36">
                 {user.email}
               </td>
-              <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
                 {user.age}
               </td>
-              <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
                 {user.role}
               </td>
               <td className="whitespace-nowrap px-4 py-2">
@@ -166,6 +181,11 @@ function UserTable() {
           ))}
         </tbody>
       </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </div>
   );
 }
