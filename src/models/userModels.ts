@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 export interface User {
   id: number;
   firstName: string;
@@ -9,19 +7,4 @@ export interface User {
   role: string;
   password: string;
   username: string;
-}
-export interface ModalProps {
-  title: string;
-  message?: string;
-  onClose: () => void;
-  children?: ReactNode;
-}
-export interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
-export interface SearchProps {
-  onSearch: (value: string) => void;
-  searchValue: string;
 }

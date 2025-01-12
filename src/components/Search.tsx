@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Input } from "./Input";
-import { SearchProps } from "../models/UserModels";
 import SearchIcon from "../assets/icons/magnifying-glass-solid.svg";
 import Xmark from "../assets/icons/xmark-solid.svg";
+import { SearchProps } from "../models/SearchModels";
 
 function Search({ onSearch, searchValue }: SearchProps) {
   const [localQuery, setLocalQuery] = useState(searchValue);

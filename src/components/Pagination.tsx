@@ -1,7 +1,7 @@
 import React from "react";
 import ArrowRight from "../assets/icons/arrow-right-solid.svg";
 import ArrowLeft from "../assets/icons/arrow-left-solid.svg";
-import { PaginationProps } from "../models/UserModels";
+import { PaginationProps } from "../models/PaginationModels";
 
 function Pagination({
   currentPage,

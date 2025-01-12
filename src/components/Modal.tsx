@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { ModalProps } from "../models/UserModels";
 import Xmark from "../assets/icons/xmark-solid.svg";
+import { ModalProps } from "../models/ModalModels";
 
 function Modal({ title, message, onClose, children }: ModalProps) {
   const modalRef = useRef<HTMLDivElement | null>(null);
