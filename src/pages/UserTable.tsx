@@ -7,6 +7,7 @@ import axios from "axios";
 import UserCreateEditModal from "../components/UserCreateEditModal";
 import { ButtonSmall } from "../components/ButtonSmall";
 import Pagination from "../components/Pagination";
+import Search from "../components/Search";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
@@ -88,6 +89,7 @@ function UserTable() {
   return (
     <div className="overflow-x-auto">
       <Header />
+      <Search />
       {userCreateOrEdit && (
         <UserCreateEditModal
           title={userToEdit ? "Edit user" : "Create user"}
