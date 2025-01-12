@@ -38,28 +38,33 @@ function Login() {
   };
   if (error) return <p>{error}</p>;
   return (
-    <form
-      className="grid container justify-center mt-10 mx-auto border-solid border-2 border-blue-600 max-w-lg py-5"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleLogin();
-      }}
-    >
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-      <Input
-        onChange={(e) => setEmail(e.target.value)}
-        className="mt-5"
-        placeholder="Email"
-        type="email"
-      />
-      <Input
-        onChange={(e) => setPassword(e.target.value)}
-        className="mt-5"
-        placeholder="Password"
-        type="password"
-      />
-      <Button className="mt-5 bg-blue-600 active:bg-blue-500">Log in</Button>
-    </form>
+    <div className="flex h-screen justify-center items-center bg-gray-100">
+      <form
+        className="grid p-10 justify-center max-w-3xl bg-white shadow-md rounded-lg "
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}
+      >
+        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+          Admin Login
+        </h2>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <Input
+          onChange={(e) => setEmail(e.target.value)}
+          className="mt-5 w-72"
+          placeholder="Email"
+          type="email"
+        />
+        <Input
+          onChange={(e) => setPassword(e.target.value)}
+          className="mt-5 w-72"
+          placeholder="Password"
+          type="password"
+        />
+        <Button className="mt-5 bg-blue-600 active:bg-blue-500">Log in</Button>
+      </form>
+    </div>
   );
 }
 export default Login;
