@@ -18,24 +18,25 @@ function UserTable() {
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [totalUsers, setTotalUsers] = useState(0);
 
-  const usersPerPage = 10;
+  const usersPerPage = 30;
 
   useEffect(() => {
     const getUsers = async () => {
       setLoading(true);
       try {
-        let res = [];
-        if (searchQuery) {
-          const response = await axios.get(
-            `https://dummyjson.com/users/search?q=${searchQuery}`
-          );
-          res = response.data.users;
-        } else {
-          const response = await fetchUsers();
-          res = response;
-        }
-        setUsers(res);
+        const skip = (currentPage - 1) * usersPerPage;
+        const limit = usersPerPage;
+        const select = "firstName,lastName,email,age,role";
+
+        const url = searchQuery
+          ? `https://dummyjson.com/users/search?q=${searchQuery}&limit=${limit}&skip=${skip}&select=${select}`
+          : `https://dummyjson.com/users?limit=${limit}&skip=${skip}&select=${select}`;
+
+        const response = await axios.get(url);
+        setUsers(response.data.users);
+        setTotalUsers(response.data.total);
       } catch (err) {
         setError("Failed to fetch data");
         console.log(err);
@@ -44,7 +45,7 @@ function UserTable() {
       }
     };
     getUsers();
-  }, [searchQuery]);
+  }, [searchQuery, currentPage]);
 
   const handleEditClick = (user: User) => {
     setUserToEdit(user);
@@ -90,18 +91,18 @@ function UserTable() {
     setUsers(res);
   };
 
-  const totalPages = Math.ceil(users.length / usersPerPage);
-  const displayedUsers = users.slice(
-    (currentPage - 1) * usersPerPage,
-    currentPage * usersPerPage
-  );
+  const totalPages = Math.ceil(totalUsers / usersPerPage);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   return (
     <div className="overflow-x-auto">
       <Header />
-      <Search onSearch={setSearchQuery} searchValue={searchQuery} />
+      <Search onSearch={handleSearch} searchValue={searchQuery} />
       {userCreateOrEdit && (
         <UserCreateEditModal
           title={userToEdit ? "Edit user" : "Create user"}
@@ -170,7 +171,7 @@ function UserTable() {
               </td>
             </tr>
           ) : (
-            displayedUsers.map((user) => (
+            users.map((user) => (
               <tr key={user.id}>
                 <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 min-w-36 max-w-48">
                   {user.firstName + " " + user.lastName}

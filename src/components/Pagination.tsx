@@ -15,7 +15,7 @@ function Pagination({
   };
 
   return (
-    <ol className="flex justify-center gap-1 text-xs font-medium overflow-hidden mt-5">
+    <ol className="flex justify-center gap-1 text-xs font-medium overflow-hidden my-5">
       <li>
         <button
           onClick={() => handlePageChange(currentPage - 1)}

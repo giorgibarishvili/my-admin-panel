@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import { Input } from "./Input";
-import { ModalProps, User } from "../models/UserModels";
+import { User } from "../models/UserModels";
 import { ButtonSmall } from "./ButtonSmall";
+import { ModalProps } from "../models/ModalModels";
 
 function UserCreateEditModal({
   title,
