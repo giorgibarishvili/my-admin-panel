@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "./Input";
+import { SearchProps } from "../models/UserModels";
 
-function Search() {
-  const [search, setSearch] = useState("");
+function Search({ onSearch, searchValue }: SearchProps) {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch(e.target.value);
+  };
+
   return (
     <div>
       <Input
-        onChange={(e) => setSearch(e.target.value)}
+        value={searchValue}
+        onChange={handleSearchChange}
         className="mt-5 w-72 rounded-3xl"
         placeholder="Search user"
         type="text"
@@ -14,4 +19,5 @@ function Search() {
     </div>
   );
 }
+
 export default Search;

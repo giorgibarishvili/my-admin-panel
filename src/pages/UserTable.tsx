@@ -17,22 +17,51 @@ function UserTable() {
   const [userCreateOrEdit, setUserCreateOrEdit] = useState(false);
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const usersPerPage = 10;
+
+  const useDebounce = (value: string, delay: number) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  };
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
     const getUsers = async () => {
+      setLoading(true);
       try {
-        const res = (await fetchUsers()) as User[];
+        let res = [];
+        if (debouncedSearchQuery) {
+          const response = await axios.get(
+            `https://dummyjson.com/users/search?q=${debouncedSearchQuery}`
+          );
+          res = response.data.users;
+        } else {
+          const response = await fetchUsers();
+          res = response;
+        }
         setUsers(res);
       } catch (err) {
-        setError("failed to fetch data");
+        setError("Failed to fetch data");
         console.log(err);
       } finally {
         setLoading(false);
       }
     };
     getUsers();
-  }, []);
+  }, [debouncedSearchQuery]);
 
   const handleEditClick = (user: User) => {
     setUserToEdit(user);
@@ -89,7 +118,7 @@ function UserTable() {
   return (
     <div className="overflow-x-auto">
       <Header />
-      <Search />
+      <Search onSearch={setSearchQuery} searchValue={searchQuery} />
       {userCreateOrEdit && (
         <UserCreateEditModal
           title={userToEdit ? "Edit user" : "Create user"}
