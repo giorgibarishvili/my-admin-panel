@@ -45,6 +45,7 @@ function UserCreateEditModal({
           className="mt-5 w-60"
           placeholder="ID"
           type="number"
+          disabled={!ID}
         />
         <Input
           value={firstName}

@@ -8,6 +8,7 @@ import UserCreateEditModal from "../components/UserCreateEditModal";
 import { ButtonSmall } from "../components/ButtonSmall";
 import Pagination from "../components/Pagination";
 import Search from "../components/Search";
+import { useNavigate } from "react-router-dom";
 
 function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
@@ -20,13 +21,22 @@ function UserTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [totalUsers, setTotalUsers] = useState(0);
 
+  const navigate = useNavigate();
+
   const usersPerPage = 30;
   const startIndex = (currentPage - 1) * usersPerPage + 1;
   const endIndex = Math.min(currentPage * usersPerPage, totalUsers);
 
   useEffect(() => {
-    const getUsers = async () => {
+    const fetchUsers = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
       setLoading(true);
+
       try {
         const skip = (currentPage - 1) * usersPerPage;
         const limit = usersPerPage;
@@ -36,18 +46,23 @@ function UserTable() {
           ? `https://dummyjson.com/users/search?q=${searchQuery}&limit=${limit}&skip=${skip}&select=${select}`
           : `https://dummyjson.com/users?limit=${limit}&skip=${skip}&select=${select}`;
 
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         setUsers(response.data.users);
         setTotalUsers(response.data.total);
       } catch (err) {
         setError("Failed to fetch data");
-        console.log(err);
+        console.error(err);
+        navigate("/login");
       } finally {
         setLoading(false);
       }
     };
-    getUsers();
-  }, [searchQuery, currentPage]);
+
+    fetchUsers();
+  }, [navigate, searchQuery, currentPage]);
 
   const handleEditClick = (user: User) => {
     setUserToEdit(user);
@@ -64,7 +79,6 @@ function UserTable() {
       if (userToEdit) {
         await axios.put(`https://dummyjson.com/users/${user.id}`, user);
       } else {
-        delete (user as any).id; //TODO
         await axios.post("https://dummyjson.com/users/add", user);
       }
       const res = (await fetchUsers()) as User[];

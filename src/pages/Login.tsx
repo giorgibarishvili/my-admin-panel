@@ -1,41 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
-import { fetchUsers } from "../services/userService";
 import { useNavigate } from "react-router-dom";
-import { User } from "../models/UserModels";
 
 function Login() {
-  const [usersLogin, setUsersLogin] = useState<User[]>([]);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getUsersLogin = async () => {
-      try {
-        const res = (await fetchUsers()) as User[];
-        setUsersLogin(res);
-      } catch (err) {
-        setError("failed to fetch data");
-        console.log(err);
-      }
-    };
-    getUsersLogin();
-  }, []);
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("https://dummyjson.com/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
 
-  const handleLogin = () => {
-    const user = usersLogin.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (user) {
-      navigate("/");
-    } else {
-      setError("Invalid email or password");
+      const data = await res.json();
+
+      if (res.ok) {
+        await new Promise((resolve) => {
+          localStorage.setItem("authToken", data.accessToken);
+          localStorage.setItem("username", username);
+          resolve(true);
+        });
+        navigate("/");
+      } else {
+        setError(data.message || "Invalid credentials");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      console.error(err);
     }
   };
+
   if (error) return <p>{error}</p>;
   return (
     <div className="flex h-screen justify-center items-center bg-gray-100">
@@ -51,10 +54,10 @@ function Login() {
         </h2>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <Input
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           className="mt-5 w-72"
           placeholder="Email"
-          type="email"
+          type="text"
         />
         <Input
           onChange={(e) => setPassword(e.target.value)}
