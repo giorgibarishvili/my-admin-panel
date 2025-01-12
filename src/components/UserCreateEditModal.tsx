@@ -94,10 +94,13 @@ function UserCreateEditModal({
           placeholder="Role"
           type="text"
         />
-        <ButtonSmall onClick={handleSave} color="green">
+        <ButtonSmall
+          onClick={handleSave}
+          className="bg-green-500 hover:bg-green-600"
+        >
           Save
         </ButtonSmall>
-        <ButtonSmall onClick={onClose} color="red">
+        <ButtonSmall onClick={onClose} className="bg-red-500 hover:bg-red-600">
           Cancel
         </ButtonSmall>
       </div>

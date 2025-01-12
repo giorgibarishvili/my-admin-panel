@@ -99,10 +99,13 @@ function UserTable() {
           onClose={() => setUserToDelete(null)}
         >
           <div>
-            <ButtonSmall onClick={() => handleConfirmDelete()} color="green">
+            <ButtonSmall
+              onClick={() => handleConfirmDelete()}
+              className="bg-green-500 hover:bg-green-600"
+            >
               yes
             </ButtonSmall>
-            <ButtonSmall onClick={() => setUserToDelete(null)} color="red">
+            <ButtonSmall onClick={() => setUserToDelete(null)} className="bg-red-500 hover:bg-red-600">
               no
             </ButtonSmall>
           </div>
@@ -124,7 +127,7 @@ function UserTable() {
               status
             </th>
             <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              <ButtonSmall onClick={() => handleCreateClick()} color="green">
+              <ButtonSmall onClick={() => handleCreateClick()} className="bg-green-500 hover:bg-green-600">
                 Create user
               </ButtonSmall>
             </th>
@@ -148,13 +151,13 @@ function UserTable() {
               <td className="whitespace-nowrap px-4 py-2">
                 <ButtonSmall
                   onClick={() => handleEditClick(user)}
-                  color="yellow"
+                  className="bg-yellow-500 hover:bg-yellow-600"
                 >
                   edit
                 </ButtonSmall>
                 <ButtonSmall
                   onClick={() => handleDeleteClick(user.id)}
-                  color="red"
+                  className="bg-red-500 hover:bg-red-600"
                 >
                   delete
                 </ButtonSmall>
