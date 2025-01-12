@@ -21,31 +21,14 @@ function UserTable() {
 
   const usersPerPage = 10;
 
-  const useDebounce = (value: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, delay);
-
-      return () => {
-        clearTimeout(handler);
-      };
-    }, [value, delay]);
-
-    return debouncedValue;
-  };
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
-
   useEffect(() => {
     const getUsers = async () => {
       setLoading(true);
       try {
         let res = [];
-        if (debouncedSearchQuery) {
+        if (searchQuery) {
           const response = await axios.get(
-            `https://dummyjson.com/users/search?q=${debouncedSearchQuery}`
+            `https://dummyjson.com/users/search?q=${searchQuery}`
           );
           res = response.data.users;
         } else {
@@ -61,7 +44,7 @@ function UserTable() {
       }
     };
     getUsers();
-  }, [debouncedSearchQuery]);
+  }, [searchQuery]);
 
   const handleEditClick = (user: User) => {
     setUserToEdit(user);
@@ -180,43 +163,53 @@ function UserTable() {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {displayedUsers.map((user) => (
-            <tr key={user.id}>
-              <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 min-w-36 max-w-48">
-                {user.firstName + " " + user.lastName}
-              </td>
-              <td className="whitespace-nowrap px-4 py-2 text-gray-700 max-w-48 min-w-36">
-                {user.email}
-              </td>
-              <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
-                {user.age}
-              </td>
-              <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
-                {user.role}
-              </td>
-              <td className="whitespace-nowrap px-4 py-2">
-                <ButtonSmall
-                  onClick={() => handleEditClick(user)}
-                  className="bg-yellow-500 hover:bg-yellow-600"
-                >
-                  edit
-                </ButtonSmall>
-                <ButtonSmall
-                  onClick={() => handleDeleteClick(user.id)}
-                  className="bg-red-500 hover:bg-red-600"
-                >
-                  delete
-                </ButtonSmall>
+          {users.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="text-center px-4 py-2 text-red-700">
+                No user has found!
               </td>
             </tr>
-          ))}
+          ) : (
+            displayedUsers.map((user) => (
+              <tr key={user.id}>
+                <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 min-w-36 max-w-48">
+                  {user.firstName + " " + user.lastName}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700 max-w-48 min-w-36">
+                  {user.email}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
+                  {user.age}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
+                  {user.role}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2">
+                  <ButtonSmall
+                    onClick={() => handleEditClick(user)}
+                    className="bg-yellow-500 hover:bg-yellow-600"
+                  >
+                    edit
+                  </ButtonSmall>
+                  <ButtonSmall
+                    onClick={() => handleDeleteClick(user.id)}
+                    className="bg-red-500 hover:bg-red-600"
+                  >
+                    delete
+                  </ButtonSmall>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
+      {users.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
     </div>
   );
 }
