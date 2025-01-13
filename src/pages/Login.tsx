@@ -56,7 +56,7 @@ function Login() {
         <Input
           onChange={(e) => setUsername(e.target.value)}
           className="mt-5 w-72 max-md:max-w-60"
-          placeholder="Email"
+          placeholder="Username"
           type="text"
         />
         <Input

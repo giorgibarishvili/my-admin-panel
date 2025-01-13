@@ -45,3 +45,27 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 # my-admin-panel
+
+src/
+├── assets/
+│   └── icons/          # Contains SVG icons used across the project.
+├── components/         # Contains reusable UI components.
+├── models/             # Stores TypeScript models and interfaces.
+├── pages/              # Contains individual pages for the application.
+├── services/           # Includes service files to manage API interactions.
+
+Technologies Used: React.js, TypeScript, Tailwind, Axios, React Router
+
+How to Login
+
+To access the admin panel, you will need to log in using valid credentials from the API. Here's how:
+
+    Use the following credentials for testing:
+        Username: emilys
+        Password: emilyspass
+
+    Upon successful login:
+        A session will be created and will remain active for 30 minutes.
+        After the session expires, you will need to log in again.
+
+    Without logging in, the application will not function as intended, as access to features is restricted to authenticated users only.
