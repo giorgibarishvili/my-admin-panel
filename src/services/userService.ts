@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../models/UserModels";
+import { User } from "../models/UserModel";
 
 export const fetchUsers = async (): Promise<User[]> => {
   try {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import { Input } from "./Input";
-import { User } from "../models/UserModels";
+import { User } from "../models/UserModel";
 import { ButtonSmall } from "./ButtonSmall";
 import { ModalProps } from "../models/ModalModels";
 import { Select } from "./Select";

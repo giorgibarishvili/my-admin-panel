@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchUsers } from "../services/userService";
 import Header from "../components/Header";
-import { User } from "../models/UserModels";
+import { User } from "../models/UserModel";
 import Modal from "../components/Modal";
 import axios from "axios";
 import UserCreateEditModal from "../components/UserCreateEditModal";
