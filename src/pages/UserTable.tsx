@@ -183,7 +183,7 @@ function UserTable() {
           </div>
         </Modal>
       )}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto ms-5">
         <table className="min-w-full divide-y-2 divide-gray-200 bg-white max-lg:text-sm max-md:text-xs">
           <thead className="text-left">
             <tr>
@@ -199,7 +199,7 @@ function UserTable() {
               <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900  max-sm:w-20">
                 status
               </th>
-              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 max-sm:w-16">
+              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 w-16">
                 {(loggedUser?.role === "admin" ||
                   loggedUser?.role === "moderator") && (
                   <ButtonSmall
