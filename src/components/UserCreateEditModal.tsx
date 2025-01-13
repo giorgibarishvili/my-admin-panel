@@ -4,6 +4,7 @@ import { Input } from "./Input";
 import { User } from "../models/UserModels";
 import { ButtonSmall } from "./ButtonSmall";
 import { ModalProps } from "../models/ModalModels";
+import { Select } from "./Select";
 
 function UserCreateEditModal({
   title,
@@ -20,7 +21,7 @@ function UserCreateEditModal({
   const [email, setEmail] = useState(user?.email || "");
   const [username, setUsername] = useState(user?.username || "");
   const [age, setAge] = useState(user?.age || "");
-  const [role, setRole] = useState(user?.role || "");
+  const [role, setRole] = useState(user?.role || "user");
 
   const handleSave = () => {
     const userToSave = {
@@ -89,12 +90,12 @@ function UserCreateEditModal({
           placeholder="Age"
           type="number"
         />
-        <Input
+        <Select
           value={role}
           onChange={(e) => setRole(e.target.value)}
           className="mt-5 max-sm:mt-1 w-60"
           placeholder="Role"
-          type="text"
+          options={["admin", "moderator", "user"]}
         />
         <ButtonSmall
           onClick={handleSave}
