@@ -1,35 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "./Button";
 import UserIcon from "../assets/icons/users-solid.svg";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-function Header() {
-  const [user, setUser] = useState<any>(null);
+function Header({ username }: { username?: string }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem("authToken");
-
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-        const response = await axios.get("https://dummyjson.com/user/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(response.data);
-      } catch (err) {
-        console.error("Error fetching user details:", err);
-        navigate("/login");
-      }
-    };
-
-    fetchUserDetails();
-  }, [token, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -43,7 +18,7 @@ function Header() {
           <span className="max-sm:text-sm">UserList</span>
         </div>
         <div className="flex items-center max-sm:text-sm">
-          <span className="mx-5">Welcome {user ? user.username : "User"}!</span>
+          <span className="mx-5">Welcome {username ? username : "User"}!</span>
           <Button
             onClick={handleLogout}
             className="bg-red-600 active:bg-red-500 max-sm:w-20 max-sm:px-0"

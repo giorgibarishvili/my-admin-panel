@@ -20,16 +20,39 @@ function UserTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalUsers, setTotalUsers] = useState(0);
+  const [loggedUser, setLoggedUser] = useState<any>(null);
 
   const navigate = useNavigate();
+  const token = localStorage.getItem("authToken");
 
   const usersPerPage = 30;
   const startIndex = (currentPage - 1) * usersPerPage + 1;
   const endIndex = Math.min(currentPage * usersPerPage, totalUsers);
 
   useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+        const response = await axios.get("https://dummyjson.com/user/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setLoggedUser(response.data);
+      } catch (err) {
+        console.error("Error fetching user details:", err);
+        navigate("/login");
+      }
+    };
+
+    fetchUserDetails();
+  }, [token, navigate]);
+
+  useEffect(() => {
     const fetchUsers = async () => {
-      const token = localStorage.getItem("authToken");
       if (!token) {
         navigate("/login");
         return;
@@ -62,7 +85,7 @@ function UserTable() {
     };
 
     fetchUsers();
-  }, [navigate, searchQuery, currentPage]);
+  }, [navigate, searchQuery, currentPage, token]);
 
   const handleEditClick = (user: User) => {
     setUserToEdit(user);
@@ -112,12 +135,13 @@ function UserTable() {
     setSearchQuery(query);
     setCurrentPage(1);
   };
+  console.log(loggedUser?.role);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   return (
     <div className="overflow-x-auto">
-      <Header />
+      <Header username={loggedUser?.username} />
       <div className="flex items-center justify-between ">
         <Search onSearch={handleSearch} searchValue={searchQuery} />
         <div className="text-sm text-gray-600 me-5 max-sm:me-2">
@@ -176,12 +200,15 @@ function UserTable() {
                 status
               </th>
               <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 max-sm:w-16">
-                <ButtonSmall
-                  onClick={() => handleCreateClick()}
-                  className="bg-green-500 hover:bg-green-600"
-                >
-                  Create user
-                </ButtonSmall>
+                {(loggedUser?.role === "admin" ||
+                  loggedUser?.role === "moderator") && (
+                  <ButtonSmall
+                    onClick={() => handleCreateClick()}
+                    className="bg-green-500 hover:bg-green-600"
+                  >
+                    Create user
+                  </ButtonSmall>
+                )}
               </th>
             </tr>
           </thead>
@@ -208,18 +235,23 @@ function UserTable() {
                     {user.role}
                   </td>
                   <td className="whitespace-nowrap px-4 py-2">
-                    <ButtonSmall
-                      onClick={() => handleEditClick(user)}
-                      className="bg-yellow-500 hover:bg-yellow-600"
-                    >
-                      edit
-                    </ButtonSmall>
-                    <ButtonSmall
-                      onClick={() => handleDeleteClick(user.id)}
-                      className="bg-red-500 hover:bg-red-600"
-                    >
-                      delete
-                    </ButtonSmall>
+                    {(loggedUser?.role === "admin" ||
+                      loggedUser?.role === "moderator") && (
+                      <ButtonSmall
+                        onClick={() => handleEditClick(user)}
+                        className="bg-yellow-500 hover:bg-yellow-600"
+                      >
+                        edit
+                      </ButtonSmall>
+                    )}
+                    {loggedUser?.role === "admin" && (
+                      <ButtonSmall
+                        onClick={() => handleDeleteClick(user.id)}
+                        className="bg-red-500 hover:bg-red-600"
+                      >
+                        delete
+                      </ButtonSmall>
+                    )}
                   </td>
                 </tr>
               ))
