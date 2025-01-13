@@ -36,6 +36,13 @@ function UserCreateEditModal({
     };
     onSave(userToSave);
   };
+  const isSaveDisabled =
+    !firstName.trim() ||
+    !lastName.trim() ||
+    !password.trim() ||
+    !email.trim() ||
+    !username.trim() ||
+    !age;
 
   return (
     <Modal title={title} onClose={() => onClose()} message={message}>
@@ -99,7 +106,12 @@ function UserCreateEditModal({
         />
         <ButtonSmall
           onClick={handleSave}
-          className="bg-green-500 hover:bg-green-600"
+          className={`${
+            isSaveDisabled
+              ? "bg-green-500 opacity-50 cursor-not-allowed"
+              : "bg-green-500 hover:bg-green-600"
+          }`}
+          disabled={isSaveDisabled}
         >
           Save
         </ButtonSmall>
