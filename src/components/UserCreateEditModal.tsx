@@ -38,11 +38,11 @@ function UserCreateEditModal({
 
   return (
     <Modal title={title} onClose={() => onClose()} message={message}>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
         <Input
           value={ID}
           onChange={(e) => setID(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="ID"
           type="number"
           disabled={!ID}
@@ -50,49 +50,49 @@ function UserCreateEditModal({
         <Input
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="First name"
           type="text"
         />
         <Input
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="Last name"
           type="text"
         />
         <Input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="Password"
           type="password"
         />
         <Input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="Email"
           type="email"
         />
         <Input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="Username"
           type="text"
         />
         <Input
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="Age"
           type="number"
         />
         <Input
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="mt-5 w-60"
+          className="mt-5 max-sm:mt-1 w-60"
           placeholder="Role"
           type="text"
         />

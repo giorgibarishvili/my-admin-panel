@@ -120,7 +120,7 @@ function UserTable() {
       <Header />
       <div className="flex items-center justify-between ">
         <Search onSearch={handleSearch} searchValue={searchQuery} />
-        <div className="text-sm text-gray-600 me-5">
+        <div className="text-sm text-gray-600 me-5 max-sm:me-2">
           Showing {startIndex} to {endIndex} of {totalUsers} users
         </div>
       </div>
@@ -159,72 +159,74 @@ function UserTable() {
           </div>
         </Modal>
       )}
-      <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
-        <thead className="ltr:text-left rtl:text-right text-left">
-          <tr>
-            <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              Name
-            </th>
-            <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              email
-            </th>
-            <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              age
-            </th>
-            <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              status
-            </th>
-            <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              <ButtonSmall
-                onClick={() => handleCreateClick()}
-                className="bg-green-500 hover:bg-green-600"
-              >
-                Create user
-              </ButtonSmall>
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {users.length === 0 ? (
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y-2 divide-gray-200 bg-white max-lg:text-sm max-md:text-xs">
+          <thead className="text-left">
             <tr>
-              <td colSpan={5} className="text-center px-4 py-2 text-red-700">
-                No user has found!
-              </td>
+              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 max-sm:w-28">
+                Name
+              </th>
+              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900  max-sm:w-40">
+                email
+              </th>
+              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900  max-sm:w-12">
+                age
+              </th>
+              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900  max-sm:w-20">
+                status
+              </th>
+              <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 max-sm:w-16">
+                <ButtonSmall
+                  onClick={() => handleCreateClick()}
+                  className="bg-green-500 hover:bg-green-600"
+                >
+                  Create user
+                </ButtonSmall>
+              </th>
             </tr>
-          ) : (
-            users.map((user) => (
-              <tr key={user.id}>
-                <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 min-w-36 max-w-48">
-                  {user.firstName + " " + user.lastName}
-                </td>
-                <td className="whitespace-nowrap px-4 py-2 text-gray-700 max-w-48 min-w-36">
-                  {user.email}
-                </td>
-                <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
-                  {user.age}
-                </td>
-                <td className="whitespace-nowrap px-4 py-2 text-gray-700 min-w-36 max-w-48">
-                  {user.role}
-                </td>
-                <td className="whitespace-nowrap px-4 py-2">
-                  <ButtonSmall
-                    onClick={() => handleEditClick(user)}
-                    className="bg-yellow-500 hover:bg-yellow-600"
-                  >
-                    edit
-                  </ButtonSmall>
-                  <ButtonSmall
-                    onClick={() => handleDeleteClick(user.id)}
-                    className="bg-red-500 hover:bg-red-600"
-                  >
-                    delete
-                  </ButtonSmall>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center px-4 py-2 text-red-700">
+                  No user has found!
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              users.map((user) => (
+                <tr key={user.id}>
+                  <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 max-w-48">
+                    {user.firstName + " " + user.lastName}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700 max-w-48 truncate ">
+                    {user.email}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700  max-w-48">
+                    {user.age}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700  max-w-48">
+                    {user.role}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2">
+                    <ButtonSmall
+                      onClick={() => handleEditClick(user)}
+                      className="bg-yellow-500 hover:bg-yellow-600"
+                    >
+                      edit
+                    </ButtonSmall>
+                    <ButtonSmall
+                      onClick={() => handleDeleteClick(user.id)}
+                      className="bg-red-500 hover:bg-red-600"
+                    >
+                      delete
+                    </ButtonSmall>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       {users.length > 0 && (
         <Pagination
           currentPage={currentPage}

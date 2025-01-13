@@ -43,7 +43,7 @@ function Login() {
   return (
     <div className="flex h-screen justify-center items-center bg-gray-100">
       <form
-        className="grid p-10 justify-center max-w-3xl bg-white shadow-md rounded-lg "
+        className="grid p-10 justify-center max-w-3xl bg-white shadow-md rounded-lg max-md:max-w-80 "
         onSubmit={(e) => {
           e.preventDefault();
           handleLogin();
@@ -55,13 +55,13 @@ function Login() {
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <Input
           onChange={(e) => setUsername(e.target.value)}
-          className="mt-5 w-72"
+          className="mt-5 w-72 max-md:max-w-60"
           placeholder="Email"
           type="text"
         />
         <Input
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-5 w-72"
+          className="mt-5 w-72 max-md:max-w-60"
           placeholder="Password"
           type="password"
         />

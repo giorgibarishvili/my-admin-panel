@@ -26,7 +26,7 @@ function Search({ onSearch, searchValue }: SearchProps) {
       <Input
         value={localQuery}
         onChange={handleInputChange}
-        className="mt-5 w-72 rounded-3xl flex justify-end"
+        className="w-72 rounded-3xl flex justify-end max-sm:w-40"
         placeholder="Search user"
         type="text"
       >
